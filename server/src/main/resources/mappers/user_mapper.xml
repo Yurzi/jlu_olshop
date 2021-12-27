@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace = 绑定一个对应的  Dao/Mapper接口-->
+<mapper namespace="net.yurzi.dao.UserMapper">
+    <select id="getUserByNickname" resultType="net.yurzi.data.User" parameterType="String">
+        SELECT * FROM user_login WHERE nickname=#{nickname};
+    </select>
+
+    <select id="getUserById" resultType="net.yurzi.data.User" parameterType="int">
+        SELECT * FROM user_login WHERE id=#{id};
+    </select>
+
+    <select id="getUserAllList" resultType="net.yurzi.data.User">
+        SELECT * FROM user_login;
+    </select>
+
+    <select id="getUserList" resultType="net.yurzi.data.User" parameterType="int">
+        SELECT * FROM user_login LIMIT #{limit};
+    </select>
+
+    <insert id="addUser" parameterType="net.yurzi.data.User">
+        INSERT INTO user_login (nickname,password,money,privilege,icon) VALUES (#{nickname},#{password},#{money},#{privilege},#{icon});
+    </insert>
+
+    <update id="updateUser" parameterType="net.yurzi.data.User">
+        UPDATE user_login SET nickname=#{nickname},password=#{password},money=#{money},privilege=#{privilege},icon=#{icon} WHERE nickname=#{nickname};
+    </update>
+    <update id="updateUserMoney">
+        UPDATE user_login SET money=#{money} WHERE nickname=#{nickname}
+    </update>
+
+    <delete id="removeUser" parameterType="net.yurzi.data.User">
+        DELETE FROM user_login WHERE id=#{id};
+    </delete>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace = 绑定一个对应的  Dao/Mapper接口-->
+<mapper namespace="net.yurzi.dao.TableInit">
+    <update id="initUserTable">
+        CREATE TABLE IF NOT EXISTS user_login(
+            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            nickname varchar(32) UNIQUE NOT NULL,
+            password varchar(64) NOT NULL ,
+            privilege tinyint DEFAULT 1 NOT NULL,
+            money decimal(32,2) DEFAULT 0 NOT NULL,
+            icon varchar(32) DEFAULT NULL
+        );
+    </update>
+    <insert id="initRootUser" parameterType="net.yurzi.data.User">
+        INSERT INTO user_login (nickname,password,money,privilege,icon) VALUES (#{nickname},#{password},#{money},#{privilege},#{icon});
+    </insert>
+
+    <select id="getRootUser" resultType="net.yurzi.data.User" parameterType="int">
+        SELECT * FROM user_login WHERE privilege>=#{int} LIMIT 1;
+    </select>
+
+    <update id="initItemListTable">
+        CREATE TABLE IF NOT EXISTS item_list(
+            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            name varchar(64) NOT NULL,
+            pic varchar(32) DEFAULT NULL ,
+            price decimal(32,2) DEFAULT 0 NOT NULL,
+            amount int NOT NULL DEFAULT 0,
+            owner varchar(32) NOT NULL
+            );
+    </update>
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace = 绑定一个对应的  Dao/Mapper接口-->
+<mapper namespace="net.yurzi.dao.ItemMapper">
+    <!--插入商品-->
+    <insert id="addItem" parameterType="net.yurzi.data.Item">
+        INSERT INTO item_list (name, pic, price, amount, owner) VALUES (#{name},#{pic},#{price},#{amount},#{owner});
+    </insert>
+    <insert id="addItemFull" parameterType="net.yurzi.data.Item">
+        INSERT INTO item_list (id,name, pic, price, amount, owner) VALUES (#{id},#{name},#{pic},#{price},#{amount},#{owner});
+    </insert>
+    <!--查找商品-->
+    <select id="getItemList" resultType="net.yurzi.data.Item">
+        SELECT * FROM item_list;
+    </select>
+    <select id="getItemById" parameterType="int" resultType="net.yurzi.data.Item">
+        SELECT * FROM item_list WHERE id=#{id};
+    </select>
+    <select id="getItemByName" parameterType="String" resultType="net.yurzi.data.Item">
+        SELECT * FROM item_list WHERE name=#{name};
+    </select>
+    <select id="getItemByOwner" parameterType="String" resultType="net.yurzi.data.Item">
+        SELECT * FROM item_list WHERE owner=#{owner};
+    </select>
+    <!--更新商品-->
+    <update id="updateItem" parameterType="net.yurzi.data.Item">
+        UPDATE item_list SET name=#{name},pic=#{pic},price=#{price},amount=#{amount},owner=#{owner} WHERE id=#{id};
+    </update> 
+    <update id="updateItemPrice">
+        UPDATE item_list SET price=#{price} WHERE id=#{id};
+    </update>
+    <update id="updateItemAmount">
+        UPDATE item_list SET amount=#{amount} WHERE id=#{id};
+    </update>
+    <!--删除商品-->
+    <delete id="removeItem" parameterType="net.yurzi.data.Item">
+        DELETE FROM item_list WHERE id=#{id};
+    </delete>
+    <delete id="removeItemById" parameterType="int">
+        DELETE FROM item_list WHERE id=#{id};
+    </delete>
+    
+</mapper>
