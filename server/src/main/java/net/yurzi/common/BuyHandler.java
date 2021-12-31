@@ -23,9 +23,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BuyHandler extends SocketHandler{
     private static final Logger logger= LogManager.getLogger(BuyHandler.class);
+    ReentrantLock buylock=new ReentrantLock();
     public BuyHandler(String rawData, SocketController _parent) {
         super(rawData, _parent);
         m_name="Buy";
@@ -67,6 +69,7 @@ public class BuyHandler extends SocketHandler{
     public void run() {
         resolveRawData();
         logger.info("数据解析完成");
+        buylock.lock();
         if (m_data.type.equals(SocketPackgeType.request)){
             //查找用户
             logger.info("处理用户:"+parent.getMappedUser(m_data.session_id).getNickname()+"的事件");
@@ -115,6 +118,7 @@ public class BuyHandler extends SocketHandler{
                     //商品列表更新
                     logger.info("更新商品"+dataItem.getName()+"的数量为:"+dataItem.getAmount());
                     itemMapper.updateItemAmount(dataItem.getId(),dataItem.getAmount());
+                    sqlSession.commit();
                 }
                 //用户列表更新
                 BigDecimal tmp=originalMoney.negate();
@@ -173,5 +177,6 @@ public class BuyHandler extends SocketHandler{
                 }
             }
         }
+        buylock.unlock();   //解锁
     }
 }
